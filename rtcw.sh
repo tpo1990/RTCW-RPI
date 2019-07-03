@@ -47,16 +47,16 @@ function game_data_rtcw() {
     wget "https://raw.githubusercontent.com/tpo1990/RTCW-RPI/master/wolfconfig.cfg"
     mv wolfconfig.cfg "$home/.wolf/main"
     chown -R $user:$user "$romdir/ports/rtcw"
-    chown -R $user:$user "$md_conf_root/rtcw"
+    chown -R $user:$user "$md_conf_root/rtcw-sp"
 }
 
 function configure_rtcw() {
-    addPort "$md_id" "rtcw" "Return to Castle Wolfenstein - SP" "$md_inst/iowolfsp.arm"
+    addPort "$md_id" "rtcw-sp" "Return to Castle Wolfenstein - SP" "$md_inst/iowolfsp.arm"
     addPort "$md_id" "rtcw-mp" "Return to Castle Wolfenstein - MP" "$md_inst/iowolfmp.arm"
 
     mkRomDir "ports/rtcw"
 
-    moveConfigDir "$home/.wolf" "$md_conf_root/rtcw"
+    moveConfigDir "$home/.wolf" "$md_conf_root/rtcw-sp"
     moveConfigDir "$md_inst/main" "$romdir/ports/rtcw"
 
     [[ "$md_mode" == "install" ]] && game_data_rtcw
