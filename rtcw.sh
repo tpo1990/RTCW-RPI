@@ -17,7 +17,13 @@ rp_module_section="exp"
 rp_module_flags=""
 
 function depends_rtcw() {
-    getDepends cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev libgles1-mesa-dev timidity freepats
+	local depends=(cmake libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev libsdl2-image-dev timidity freepats)
+
+	if compareVersions "$__os_debian_ver" lt 10; then
+        depends+=(libgles1-mesa-dev)
+    fi
+	
+	getDepends "${depends[@]}"
 }
 
 function sources_rtcw() {
@@ -55,17 +61,22 @@ function install_rtcw() {
 }
 
 function game_data_rtcw() {
-	mkdir /opt/retropie/ports/rtcw/main
-	mv /opt/retropie/ports/rtcw/*.so /opt/retropie/ports/rtcw/main
-	mv /opt/retropie/ports/rtcw/vm /opt/retropie/ports/rtcw/main
     mkdir "$home/.wolf/main"
+	cp -v /opt/retropie/ports/rtcw/*.so /opt/retropie/ports/rtcw/main
+	cp -Rv /opt/retropie/ports/rtcw/vm /opt/retropie/ports/rtcw/main
+	rm /opt/retropie/ports/rtcw/*.so
+	rm -R /opt/retropie/ports/rtcw/vm
     wget "https://raw.githubusercontent.com/tpo1990/RTCW-RPI/master/wolfconfig.cfg"
     mv wolfconfig.cfg "$home/.wolf/main"
+    wget "https://raw.githubusercontent.com/tpo1990/RTCW-RPI/master/wolfconfig_mp.cfg"
+    mv wolfconfig_mp.cfg "$home/.wolf/main"
     chown -R $user:$user "$romdir/ports/rtcw"
     chown -R $user:$user "$md_conf_root/rtcw-sp"
 }
 
 function configure_rtcw() {
+    rm -R /home/pi/RetroPie/roms/ports/rtcw/vm
+	
     addPort "rtcw-sp" "rtcw-sp" "Return to Castle Wolfenstein SP" "$md_inst/iowolfsp.armv7l"
     addPort "rtcw-mp" "rtcw-mp" "Return to Castle Wolfenstein MP" "$md_inst/iowolfmp.armv7l"
 
@@ -75,4 +86,9 @@ function configure_rtcw() {
     moveConfigDir "$md_inst/main" "$romdir/ports/rtcw"
 
     [[ "$md_mode" == "install" ]] && game_data_rtcw
+}
+function remove_rtcw() {
+    rm /home/pi/.wolf
+	rm /home/pi/RetroPie/roms/ports/rtcw/*.so
+	rm -R /home/pi/RetroPie/roms/ports/rtcw/vm
 }
