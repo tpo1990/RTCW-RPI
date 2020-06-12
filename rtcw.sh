@@ -130,8 +130,8 @@ function game_data_rtcw() {
 }
 
 function configure_rtcw() {
-    addPort "rtcw-sp" "rtcw-sp" "Return to Castle Wolfenstein SP" "$md_inst/iowolfsp.$(_arch_iortcw)"
-    addPort "rtcw-mp" "rtcw-mp" "Return to Castle Wolfenstein MP" "$md_inst/iowolfmp.$(_arch_iortcw)"
+    addPort "rtcw-sp" "rtcw-sp" "Return to Castle Wolfenstein (SP)" "$md_inst/iowolfsp.$(_arch_iortcw)"
+    addPort "rtcw-mp" "rtcw-mp" "Return to Castle Wolfenstein (MP)" "$md_inst/iowolfmp.$(_arch_iortcw)"
 
     mkRomDir "ports/rtcw"
 
